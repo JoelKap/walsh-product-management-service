@@ -38,7 +38,7 @@ namespace Walsh.Product.Management.Service.Dal.Implimentations
             }
         }
 
-        public async Task<ProductStockModel> GetProductInStock(int productId)
+        public async Task<ProductStockModel> GetProductInStockAsync(int productId)
         {
             var stockDto = await _walshContext.ProductStocks.FirstOrDefaultAsync(product => product.ProductId == productId);
 
