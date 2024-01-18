@@ -37,8 +37,6 @@ namespace Walsh.Product.Management.Service.Dal.DTO
             {
                 entity.ToTable("Product");
 
-                entity.Property(e => e.ProductId).ValueGeneratedNever();
-
                 entity.Property(e => e.CreatedAt).HasColumnType("datetime");
 
                 entity.Property(e => e.ProductPrice).HasColumnType("decimal(18, 0)");
@@ -65,8 +63,6 @@ namespace Walsh.Product.Management.Service.Dal.DTO
 
                 entity.ToTable("ProductCategory");
 
-                entity.Property(e => e.CategoryId).ValueGeneratedNever();
-
                 entity.Property(e => e.CategoryName).HasMaxLength(50);
             });
 
@@ -76,8 +72,6 @@ namespace Walsh.Product.Management.Service.Dal.DTO
                     .HasName("PK_Location");
 
                 entity.ToTable("ProductLocation");
-
-                entity.Property(e => e.LocationId).ValueGeneratedNever();
             });
 
             modelBuilder.Entity<ProductReview>(entity =>
@@ -86,9 +80,11 @@ namespace Walsh.Product.Management.Service.Dal.DTO
 
                 entity.ToTable("ProductReview");
 
-                entity.Property(e => e.ReviewId).ValueGeneratedNever();
+                entity.Property(e => e.CreatedAt).HasColumnType("datetime");
 
                 entity.Property(e => e.ProductReview1).HasColumnName("ProductReview");
+
+                entity.Property(e => e.UpdateAt).HasColumnType("datetime");
 
                 entity.HasOne(d => d.Product)
                     .WithMany(p => p.ProductReviews)
@@ -103,9 +99,11 @@ namespace Walsh.Product.Management.Service.Dal.DTO
 
                 entity.ToTable("ProductStock");
 
-                entity.Property(e => e.StockId).ValueGeneratedNever();
+                entity.Property(e => e.CreatedAt).HasColumnType("datetime");
 
                 entity.Property(e => e.ProductInStock).HasMaxLength(3);
+
+                entity.Property(e => e.UpdateAt).HasColumnType("datetime");
 
                 entity.HasOne(d => d.Product)
                     .WithMany(p => p.ProductStocks)
