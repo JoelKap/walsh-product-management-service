@@ -1,13 +1,18 @@
-﻿using Walsh.Product.Management.Service.Dal.Contracts;
+﻿using AutoMapper;
+using Walsh.Product.Management.Service.Dal.Contracts;
+using Walsh.Product.Management.Service.Dal.DTO;
 using Walsh.Product.Management.Service.Model;
 
 namespace Walsh.Product.Management.Service.Dal.Implimentations
 {
     public class ProductDataAccess: IProductDataAccess
     {
-        public ProductDataAccess()
+        private readonly WalshDbContext _walshContext;
+        private readonly IMapper _mapper;
+        public ProductDataAccess(WalshDbContext walshContext)
         {
-            
+            _walshContext = walshContext;
+            _mapper = Mappings.MappingProfile.MapperConfiguration();
         }
 
         public Task CreateProductAsync(ProductModel model)
@@ -27,7 +32,15 @@ namespace Walsh.Product.Management.Service.Dal.Implimentations
 
         public IEnumerable<ProductModel> GetProducts()
         {
-            throw new NotImplementedException();
+            var products = new List<ProductModel>();
+            var productsDto = _walshContext.Products.Where(x => x.IsDeleted == false)
+                                             .ToList();
+            for (int i = 0; i < productsDto.Count; i++)
+            {
+                var product = _mapper.Map<Walsh.Product.Management.Service.Dal.DTO.Product, ProductModel>(productsDto[i]);
+                products.Add(product);
+            }
+            return products;
         }
 
         public Task LikeOrUnlikeProductAsync(ProductModel model)
