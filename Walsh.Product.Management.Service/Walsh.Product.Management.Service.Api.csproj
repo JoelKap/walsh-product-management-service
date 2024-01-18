@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Walsh.Product.Management.Service.Bll\Walsh.Product.Management.Service.Bll.csproj" />
     <ProjectReference Include="..\Walsh.Product.Management.Service.Model\Walsh.Product.Management.Service.Model.csproj" />
   </ItemGroup>
 
