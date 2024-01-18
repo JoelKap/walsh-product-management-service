@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Walsh.Product.Management.Service.Dal.Contracts;
 using Walsh.Product.Management.Service.Dal.DTO;
 using Walsh.Product.Management.Service.Model;
@@ -25,9 +26,13 @@ namespace Walsh.Product.Management.Service.Dal.Implimentations
             throw new NotImplementedException();
         }
 
-        public Task<ProductModel> GetProduct(int productId)
+        public async Task<ProductModel> GetProduct(int productId)
         {
-            throw new NotImplementedException();
+            var productDto = await _walshContext.Products.FirstOrDefaultAsync(product => product.ProductId == productId);
+
+            if (productDto is null) return null;
+
+            return _mapper.Map<DTO.Product, ProductModel>(productDto);
         }
 
         public IEnumerable<ProductModel> GetProducts()
