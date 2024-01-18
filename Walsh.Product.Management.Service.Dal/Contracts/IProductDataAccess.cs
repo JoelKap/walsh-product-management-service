@@ -5,7 +5,7 @@ namespace Walsh.Product.Management.Service.Dal.Contracts
     public interface IProductDataAccess
     {
         IEnumerable<ProductModel> GetProducts(); 
-        Task<ProductModel> GetProduct(int productId);
+        Task<ProductModel> GetProductAsync(int productId);
         IEnumerable<ProductModel> SearchProducts(string searchStr);
         Task<ProductModel> CreateProductAsync(ProductModel model);
         Task<ProductModel> UpdateProductAsync(ProductModel model);

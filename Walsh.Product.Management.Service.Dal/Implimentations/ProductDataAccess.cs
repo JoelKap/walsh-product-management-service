@@ -49,7 +49,7 @@ namespace Walsh.Product.Management.Service.Dal.Implimentations
             return Task.CompletedTask;
         }
 
-        public async Task<ProductModel> GetProduct(int productId)
+        public async Task<ProductModel> GetProductAsync(int productId)
         {
             var productDto = await _walshContext.Products.FirstOrDefaultAsync(product => product.ProductId == productId);
 
