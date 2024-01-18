@@ -9,12 +9,11 @@
         public string ProductImageUrl { get; set; }
         public string ProductDescription { get; set; }
         public bool ProductLike { get; set; }
-        public string ProductReview { get; set; }
-        public int ProductRating { get; set; }
-        public int ProductPrice { get; set; } 
-        public string ProductInStock { get; set; }
-        public bool IsDeleted { get; set; } 
+        public int ProductPrice { get; set; }
+        public bool IsDeleted { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdateAt { get; set; }
+        public ICollection<ProductReviewModel> Reviews { get; set; }
+        public ProductStockModel Stock { get; set; }
     }
 }
