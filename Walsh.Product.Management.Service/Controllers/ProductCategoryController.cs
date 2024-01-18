@@ -8,11 +8,11 @@ namespace Walsh.Product.Management.Service.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CategoryController : ControllerBase
+    public class ProductCategoryController : ControllerBase
     {
         private readonly IProductCategoryService _productCategoryService;
 
-        public CategoryController(IProductCategoryService productCategoryService)
+        public ProductCategoryController(IProductCategoryService productCategoryService)
         {
             _productCategoryService = productCategoryService;
         }
