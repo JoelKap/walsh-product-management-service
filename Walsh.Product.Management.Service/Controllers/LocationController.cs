@@ -13,21 +13,7 @@ namespace Walsh.Product.Management.Service.Api.Controllers
         [HttpGet]
         public List<ProductLocationModel> Get() 
         {
-            var dummyCategories = new List<ProductLocationModel>() {
-                new ProductLocationModel(){
-                        LocationId = 1,
-                        LocationName = "Montreal"
-                        },
-                        new ProductLocationModel(){
-                        LocationId = 2,
-                        LocationName = "Gatineau"
-                        },
-                        new ProductLocationModel(){
-                        LocationId = 3,
-                        LocationName = "Sherbrooke"
-                   }
-            };  
-            return dummyCategories;
+            return null;
         }
     }
 }
