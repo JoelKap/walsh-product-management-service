@@ -7,9 +7,9 @@ namespace Walsh.Product.Management.Service.Dal.Contracts
         IEnumerable<ProductModel> GetProducts(); 
         Task<ProductModel> GetProduct(int productId);
         IEnumerable<ProductModel> SearchProducts(string searchStr);
-        Task CreateProductAsync(ProductModel model); 
-        Task UpdateProductAsync(ProductModel model); 
-        Task LikeOrUnlikeProductAsync(ProductModel model);
+        Task<ProductModel> CreateProductAsync(ProductModel model);
+        Task<ProductModel> UpdateProductAsync(ProductModel model);
+        Task<ProductModel> LikeOrUnlikeProductAsync(ProductModel model);
         Task DeleteProductAsync(int productId);
     } 
 }

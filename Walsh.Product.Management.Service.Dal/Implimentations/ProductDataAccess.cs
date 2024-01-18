@@ -16,7 +16,7 @@ namespace Walsh.Product.Management.Service.Dal.Implimentations
             _mapper = Mappings.MappingProfile.MapperConfiguration();
         }
 
-        public Task CreateProductAsync(ProductModel model)
+        public async Task<ProductModel> CreateProductAsync(ProductModel model)
         {
             throw new NotImplementedException();
         }
@@ -48,7 +48,7 @@ namespace Walsh.Product.Management.Service.Dal.Implimentations
             return products;
         }
 
-        public Task LikeOrUnlikeProductAsync(ProductModel model)
+        public async Task<ProductModel> LikeOrUnlikeProductAsync(ProductModel model)
         {
             throw new NotImplementedException();
         }
@@ -72,7 +72,7 @@ namespace Walsh.Product.Management.Service.Dal.Implimentations
             return products;
         }
 
-        public Task UpdateProductAsync(ProductModel model)
+        public async Task<ProductModel> UpdateProductAsync(ProductModel model)
         {
             throw new NotImplementedException();
         }
