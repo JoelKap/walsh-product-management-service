@@ -55,7 +55,21 @@ namespace Walsh.Product.Management.Service.Dal.Implimentations
 
         public IEnumerable<ProductModel> SearchProducts(string searchStr)
         {
-            throw new NotImplementedException();
+            var products = new List<ProductModel>();
+            var productsDto = _walshContext.Products
+                .Where(product =>
+                    (product.ProductTitle.Contains(searchStr) ||
+                     product.ProductDescription.Contains(searchStr) ||
+                     product.ProductPrice.ToString() == searchStr) &&
+                    !product.IsDeleted)
+                .ToList();
+
+            for (int i = 0; i < productsDto.Count; i++)
+            {
+                var product = _mapper.Map<DTO.Product, ProductModel>(productsDto[i]);
+                products.Add(product);
+            }
+            return products;
         }
 
         public Task UpdateProductAsync(ProductModel model)
