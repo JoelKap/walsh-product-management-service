@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "SEMDNqlRbUtK6M71uuUlq4TJbaPPy9l358DqVn1ZHQA=",
+  "Source": "Walsh.Product.Management.Service.Api",
+  "BasePath": "_content/Walsh.Product.Management.Service.Api",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}

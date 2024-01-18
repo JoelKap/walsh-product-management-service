@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\Walsh.Product.Management.Service.props" />
+</Project>
