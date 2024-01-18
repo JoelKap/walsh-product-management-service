@@ -19,4 +19,12 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Mappings\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Walsh.Product.Management.Service.Model\Walsh.Product.Management.Service.Model.csproj" />
+  </ItemGroup>
+
 </Project>
