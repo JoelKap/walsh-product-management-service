@@ -2,8 +2,8 @@
 
 namespace Walsh.Product.Management.Service.Dal.Contracts
 {
-    public interface ICategoryDataAccess
+    public interface IProductCategoryDataAccess
     {
-        IEnumerable<ProductCategoryModel> GetLocations();
+        IEnumerable<ProductCategoryModel> GetCategories();
     }
 }

@@ -10,17 +10,17 @@ using Walsh.Product.Management.Service.Model;
 
 namespace Walsh.Product.Management.Service.Dal.Implimentations
 {
-    public class CategoryDataAccess: ICategoryDataAccess
+    public class ProductCategoryDataAccess: IProductCategoryDataAccess
     {
         private readonly WalshDbContext _walshContext;
         private readonly IMapper _mapper;
-        public CategoryDataAccess(WalshDbContext walshContext)
+        public ProductCategoryDataAccess(WalshDbContext walshContext)
         {
             _walshContext = walshContext;
             _mapper = Mappings.MappingProfile.MapperConfiguration();
         }
 
-        public IEnumerable<ProductCategoryModel> GetLocations()
+        public IEnumerable<ProductCategoryModel> GetCategories()
         {
             var categories = new List<ProductCategoryModel>();
             var categoriesDto = _walshContext.ProductCategories.ToList();
