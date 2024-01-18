@@ -19,7 +19,23 @@ namespace Walsh.Product.Management.Service.Dal.Implimentations
 
         public async Task<ProductModel> CreateProductAsync(ProductModel model)
         {
-            throw new NotImplementedException();
+            model.IsDeleted = false;
+            model.CreatedAt = DateTime.Now;
+            model.UpdateAt = DateTime.Now;
+
+            var productDto = _mapper.Map<ProductModel, DTO.Product>(model);
+
+            _walshContext.Products.Add(productDto);
+            
+            try
+            {
+                await _walshContext.SaveChangesAsync();
+                return model;
+            }
+            catch (DbUpdateException ex)
+            {
+                throw new UpdateFailedException("Failed to update product.", ex);
+            }
         }
 
         public Task DeleteProductAsync(int productId)
