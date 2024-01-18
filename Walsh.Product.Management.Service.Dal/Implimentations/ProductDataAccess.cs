@@ -7,7 +7,7 @@ using Walsh.Product.Management.Service.Shared.CustomExceptions;
 
 namespace Walsh.Product.Management.Service.Dal.Implimentations
 {
-    public class ProductDataAccess: IProductDataAccess
+    public class ProductDataAccess : IProductDataAccess
     {
         private readonly WalshDbContext _walshContext;
         private readonly IMapper _mapper;
@@ -26,7 +26,7 @@ namespace Walsh.Product.Management.Service.Dal.Implimentations
             var productDto = _mapper.Map<ProductModel, DTO.Product>(model);
 
             _walshContext.Products.Add(productDto);
-            
+
             try
             {
                 await _walshContext.SaveChangesAsync();
@@ -40,7 +40,13 @@ namespace Walsh.Product.Management.Service.Dal.Implimentations
 
         public Task DeleteProductAsync(int productId)
         {
-            throw new NotImplementedException();
+            var productDto = _walshContext.Products.FirstOrDefault(product => product.ProductId == productId);
+            if (productDto is null)
+                throw new NotFoundException($"Product with ID {productId} not found");
+
+            productDto.IsDeleted = true;
+            _walshContext.SaveChanges();
+            return Task.CompletedTask;
         }
 
         public async Task<ProductModel> GetProduct(int productId)
