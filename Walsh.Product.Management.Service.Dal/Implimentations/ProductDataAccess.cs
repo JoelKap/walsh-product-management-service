@@ -73,7 +73,7 @@ namespace Walsh.Product.Management.Service.Dal.Implimentations
 
         public async Task<ProductModel> LikeOrUnlikeProductAsync(ProductModel model)
         {
-            throw new NotImplementedException();
+            return await UpdateProductAsync(model);
         }
 
         public IEnumerable<ProductModel> SearchProducts(string searchStr)
