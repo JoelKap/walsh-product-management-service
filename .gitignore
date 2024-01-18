@@ -68,6 +68,8 @@ artifacts/
 
 # ASP.NET Scaffolding
 ScaffoldingReadMe.txt
+bin/Debug/net6.0
+obj/Debug/net6.0
 
 # StyleCop
 StyleCopReport.xml
