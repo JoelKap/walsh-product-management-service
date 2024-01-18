@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Walsh.Product.Management.Service.Dal.Contracts;
 using Walsh.Product.Management.Service.Dal.DTO;
 using Walsh.Product.Management.Service.Model;
+using Walsh.Product.Management.Service.Shared.CustomExceptions;
 
 namespace Walsh.Product.Management.Service.Dal.Implimentations
 {
@@ -74,7 +75,25 @@ namespace Walsh.Product.Management.Service.Dal.Implimentations
 
         public async Task<ProductModel> UpdateProductAsync(ProductModel model)
         {
-            throw new NotImplementedException();
+            var productDto = _walshContext.Products.FirstOrDefault(product => product.ProductId == model.ProductId);
+
+            if (productDto == null)
+            {
+                throw new NotFoundException($"Product with ID {model.ProductId} not found.");
+            }
+
+            _mapper.Map<ProductModel, DTO.Product>(model, productDto);
+
+            try
+            {
+                await _walshContext.SaveChangesAsync();
+                return model;
+            }
+            catch (Exception ex)
+            {
+                throw new UpdateFailedException("Failed to update product.", ex);
+            }
         }
+
     }
 }
