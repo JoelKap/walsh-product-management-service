@@ -21,14 +21,15 @@ namespace Walsh.Product.Management.Service.Api.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-           return Ok(_productService.GetProducts());
+            return Ok(_productService.GetProducts());
         }
 
         // GET api/<ProductController>/5
         [HttpGet("{productId}")]
-        public IActionResult GetProduct(int productId)
+        public async Task<IActionResult> GetProduct(int productId)
         {
-            return Ok(_productService.GetProductAsync(productId));
+            var products = await _productService.GetProductAsync(productId);
+            return Ok(products);
         }
 
         // GET api/<ProductController>/str

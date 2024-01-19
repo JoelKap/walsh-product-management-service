@@ -54,18 +54,34 @@ namespace Walsh.Product.Management.Service.Dal.Implimentations
 
         public async Task<ProductModel> GetProductAsync(int productId)
         {
-            var productDto = await _walshContext.Products.FirstOrDefaultAsync(product => product.ProductId == productId);
+            var productDto = await _walshContext.Products
+                .Include(product => product.ProductStocks.Where(stock => stock.ProductId == productId))
+                .Include(product => product.ProductReviews.Where(review => review.ProductId == productId))
+                .AsNoTracking()
+                .Where(product => product.IsDeleted == false && product.ProductId == productId)
+                .FirstOrDefaultAsync();
 
-            if (productDto is null) return null;
+            if (productDto is null)
+            {
+                return null;
+            }
 
-            return _mapper.Map<DTO.Product, ProductModel>(productDto);
+            List<ProductReviewModel>? productReviews = MapProductReview(productId, productDto);
+
+            ProductStockModel? productStock = MapProductStock(productId, productDto);
+
+            var productModel = _mapper.Map<ProductModel>(productDto);
+            productModel.Reviews = productReviews;
+            productModel.Stock = productStock;
+
+            return productModel;
         }
 
         public IEnumerable<ProductModel> GetProducts()
         {
             var products = new List<ProductModel>();
-            var productsDto = _walshContext.Products.Include(x=> x.ProductStocks)
-                                                    .Include(x=> x.ProductReviews)
+            var productsDto = _walshContext.Products.Include(x => x.ProductReviews)
+                                                    .AsNoTracking()
                                                     .Where(x => x.IsDeleted == false)
                                                     .ToList();
 
@@ -123,5 +139,31 @@ namespace Walsh.Product.Management.Service.Dal.Implimentations
             }
         }
 
+        private static List<ProductReviewModel>? MapProductReview(int productId, DTO.Product? productDto)
+        {
+            return productDto.ProductReviews?.Select(review => new ProductReviewModel
+            {
+                CreatedAt = review.CreatedAt,
+                IsDeleted = review.IsDeleted,
+                ProductId = productId,
+                ProductRating = review.ProductRating,
+                ProductReview = review.ProductReview1,
+                ReviewId = review.ReviewId,
+                UpdateAt = review.UpdateAt,
+            }).ToList();
+        }
+
+        private static ProductStockModel? MapProductStock(int productId, DTO.Product? productDto)
+        {
+            return productDto.ProductStocks?.Select(stock => new ProductStockModel
+            {
+                CreatedAt = stock.CreatedAt,
+                IsDeleted = stock.IsDeleted,
+                ProductId = productId,
+                ProductInStock = stock.ProductInStock,
+                UpdateAt = stock.UpdateAt,
+                StockId = stock.StockId
+            }).FirstOrDefault();
+        }
     }
 }
