@@ -23,18 +23,6 @@ namespace Walsh.Product.Management.Service.Api.Controllers
             return Ok(_productStockService.GetProductInStockAsync(productId));
         }
 
-        // POST api/<ProductStockController>
-        [HttpPost()]
-        public IActionResult Post(ProductStockModel model)
-        {
-            if (model.Validate(out List<string> messages) == false)
-            {
-                return BadRequest(string.Join(Environment.NewLine, messages));
-            }
-
-            return Ok(_productStockService.CreateProductInStockAsync(model));
-        }
-
         // PUT api/<ProductStockController>
         [HttpPut()]
         public IActionResult Put([FromBody] ProductStockModel model)

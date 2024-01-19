@@ -30,6 +30,7 @@ namespace Walsh.Product.Management.Service.Dal.Implimentations
             try
             {
                 await _walshContext.SaveChangesAsync();
+                model.ReviewId = productDto.ReviewId;
                 return model;
             }
             catch (DbUpdateException ex)
@@ -40,11 +41,19 @@ namespace Walsh.Product.Management.Service.Dal.Implimentations
           
         public async Task<ProductReviewModel> GetProductReviewAsync(int productId)
         {
-            var reviewDto = await _walshContext.ProductReviews.FirstOrDefaultAsync(product => product.ProductId == productId);
+            try
+            {
+                var reviewDto = await _walshContext.ProductReviews.FirstOrDefaultAsync(product => product.ProductId == productId);
 
-            if (reviewDto is null) return null;
+                if (reviewDto is null) return null;
 
-            return _mapper.Map<DTO.ProductReview, ProductReviewModel>(reviewDto);
+                return _mapper.Map<DTO.ProductReview, ProductReviewModel>(reviewDto);
+            }
+            catch (Exception)
+            {
+
+                throw new NotFoundException($"Product with ID {productId} not found.");
+            }
         }
 
         public async Task<ProductReviewModel> UpdateProductReviewAsync(ProductReviewModel model)

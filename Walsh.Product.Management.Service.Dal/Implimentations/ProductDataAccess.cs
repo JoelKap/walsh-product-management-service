@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Walsh.Product.Management.Service.Dal.Contracts;
 using Walsh.Product.Management.Service.Dal.DTO;
 using Walsh.Product.Management.Service.Model;
@@ -63,8 +64,11 @@ namespace Walsh.Product.Management.Service.Dal.Implimentations
         public IEnumerable<ProductModel> GetProducts()
         {
             var products = new List<ProductModel>();
-            var productsDto = _walshContext.Products.Where(x => x.IsDeleted == false)
-                                             .ToList();
+            var productsDto = _walshContext.Products.Include(x=> x.ProductStocks)
+                                                    .Include(x=> x.ProductReviews)
+                                                    .Where(x => x.IsDeleted == false)
+                                                    .ToList();
+
             for (int i = 0; i < productsDto.Count; i++)
             {
                 var product = _mapper.Map<Walsh.Product.Management.Service.Dal.DTO.Product, ProductModel>(productsDto[i]);

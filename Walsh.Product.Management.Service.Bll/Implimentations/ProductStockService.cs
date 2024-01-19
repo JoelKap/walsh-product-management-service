@@ -12,7 +12,10 @@ namespace Walsh.Product.Management.Service.Bll.Implimentations
             _productStockDataAccess = productStockDataAccess;
         }
 
-        public Task<ProductStockModel> CreateProductInStockAsync(ProductStockModel model) => _productStockDataAccess.CreateProductInStockAsync(model);
+        public async Task<ProductStockModel> CreateProductInStockAsync(ProductStockModel model)
+        {
+            return await _productStockDataAccess.CreateProductInStockAsync(model);
+        }
 
         public Task<ProductStockModel> GetProductInStockAsync(int productId) => _productStockDataAccess.GetProductInStockAsync(productId);
 
