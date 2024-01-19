@@ -41,15 +41,14 @@ namespace Walsh.Product.Management.Service.Dal.Implimentations
             }
         }
 
-        public Task DeleteProductAsync(int productId)
+        public async Task DeleteProductAsync(int productId)
         {
             var productDto = _walshContext.Products.FirstOrDefault(product => product.ProductId == productId);
             if (productDto is null)
                 throw new NotFoundException($"Product with ID {productId} not found");
 
             productDto.IsDeleted = true;
-            _walshContext.SaveChanges();
-            return Task.CompletedTask;
+            await _walshContext.SaveChangesAsync();
         }
 
         public async Task<ProductModel> GetProductAsync(int productId)
