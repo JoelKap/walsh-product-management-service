@@ -22,17 +22,5 @@ namespace Walsh.Product.Management.Service.Api.Controllers
             var productReview = await _productReviewService.GetProductReviewAsync(productId);
             return Ok(productReview);
         }
-
-        // PUT api/<ProductReviewController>
-        [HttpPut()]
-        public IActionResult Put([FromBody] ProductReviewModel model)
-        {
-            if (model.Validate(out List<string> messages) == false)
-            {
-                return BadRequest(string.Join(Environment.NewLine, messages));
-            }
-
-            return Ok(_productReviewService.UpdateProductReviewAsync(model));
-        }
     }
 }
