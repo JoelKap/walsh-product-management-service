@@ -17,9 +17,10 @@ namespace Walsh.Product.Management.Service.Api.Controllers
 
         // GET api/<ProductReviewController>/5
         [HttpGet("{productId}")]
-        public IActionResult GetProductReview(int productId)
+        public async Task<IActionResult> GetProductReview(int productId)
         {
-            return Ok(_productReviewService.GetProductReviewAsync(productId));
+            var productReview = await _productReviewService.GetProductReviewAsync(productId);
+            return Ok(productReview);
         }
 
         // PUT api/<ProductReviewController>
