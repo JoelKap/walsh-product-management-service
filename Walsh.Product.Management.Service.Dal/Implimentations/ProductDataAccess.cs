@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using Walsh.Product.Management.Service.Dal.Contracts;
 using Walsh.Product.Management.Service.Dal.DTO;
 using Walsh.Product.Management.Service.Model;
@@ -126,10 +125,11 @@ namespace Walsh.Product.Management.Service.Dal.Implimentations
             }
 
             _mapper.Map<ProductModel, DTO.Product>(model, productDto);
+            var entity = _walshContext.Set<DTO.Product>().Update(productDto);
 
             try
             {
-                await _walshContext.SaveChangesAsync();
+                 _walshContext.SaveChanges();
                 return model;
             }
             catch (Exception ex)
@@ -137,6 +137,7 @@ namespace Walsh.Product.Management.Service.Dal.Implimentations
                 throw new UpdateFailedException("Failed to update product.", ex);
             }
         }
+
 
         private static List<ProductReviewModel>? MapProductReview(int productId, DTO.Product? productDto)
         {

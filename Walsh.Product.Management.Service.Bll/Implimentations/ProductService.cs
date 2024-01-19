@@ -36,7 +36,7 @@ namespace Walsh.Product.Management.Service.Bll.Implimentations
             productReviewModel.ProductRating = model.Reviews.FirstOrDefault().ProductRating;
 
             var createdProductReview = await _productReviewDataAccess.CreateProductReviewAsync(productReviewModel);
-             
+
             product.Reviews = new List<ProductReviewModel> { createdProductReview }; ;
             product.Stock = createdProductInStock;
 
@@ -53,6 +53,9 @@ namespace Walsh.Product.Management.Service.Bll.Implimentations
 
         public IEnumerable<ProductModel> SearchProducts(string searchStr) => _productDataAccess.SearchProducts(searchStr);
 
-        public Task<ProductModel> UpdateProductAsync(ProductModel model) => _productDataAccess.UpdateProductAsync(model);
+        public async Task<ProductModel> UpdateProductAsync(ProductModel model)
+        {
+            return await _productDataAccess.UpdateProductAsync(model);
+        }
     }
 }

@@ -55,14 +55,16 @@ namespace Walsh.Product.Management.Service.Api.Controllers
 
         // PUT api/<ProductController>
         [HttpPut()]
-        public IActionResult Put([FromBody] ProductModel model)
+        public async Task<IActionResult> Put([FromBody] ProductModel model)
         {
             if (model.Validate(out List<string> messages) == false)
             {
                 return BadRequest(string.Join(Environment.NewLine, messages));
             }
 
-            return Ok(_productService.UpdateProductAsync(model));
+            var udpatedProduct = await _productService.UpdateProductAsync(model);
+
+            return Ok(udpatedProduct);
         }
 
         // PUT api/<ProductController>
