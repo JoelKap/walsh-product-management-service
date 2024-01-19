@@ -7,12 +7,26 @@ using Walsh.Product.Management.Service.Dal.Contracts;
 using Walsh.Product.Management.Service.Dal.Implimentations;
 using Walsh.Product.Management.Service.Bll.Contracts;
 using Walsh.Product.Management.Service.Bll.Implimentations;
+using Walsh.Product.Management.Service.Dal.DTO;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
+
+builder.Configuration.AddJsonFile("appsettings.json");
+
+// Database connection
+builder.Services.AddEntityFrameworkSqlServer()
+    .AddDbContext<WalshDbContext>(options => options.UseSqlServer(
+        builder.Configuration.GetConnectionString("WalshConnection"), sql =>
+        {
+            sql.EnableRetryOnFailure();
+            sql.UseRelationalNulls();
+            sql.CommandTimeout(1000);
+        }));
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
