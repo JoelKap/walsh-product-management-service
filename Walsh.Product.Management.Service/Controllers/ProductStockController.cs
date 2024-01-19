@@ -24,17 +24,5 @@ namespace Walsh.Product.Management.Service.Api.Controllers
 
             return Ok(productStocks);
         }
-
-        // PUT api/<ProductStockController>
-        [HttpPut()]
-        public IActionResult Put([FromBody] ProductStockModel model)
-        {
-            if (model.Validate(out List<string> messages) == false)
-            {
-                return BadRequest(string.Join(Environment.NewLine, messages));
-            }
-
-            return Ok(_productStockService.UpdateProductInStockAsync(model));
-        }
     }
 }
