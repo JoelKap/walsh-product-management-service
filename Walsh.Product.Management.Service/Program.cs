@@ -1,3 +1,13 @@
+using Walsh.Product.Management.Service.Model;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
+using Walsh.Product.Management.Service.Dal.Contracts;
+using Walsh.Product.Management.Service.Dal.Implimentations;
+using Walsh.Product.Management.Service.Bll.Contracts;
+using Walsh.Product.Management.Service.Bll.Implimentations;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -6,6 +16,26 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// Service registrations
+builder.Services.AddScoped<IProductCategoryDataAccess, ProductCategoryDataAccess>();
+builder.Services.AddScoped<IProductCategoryService, ProductCategoryService>();
+
+builder.Services.AddScoped<IProductDataAccess, ProductDataAccess>();
+builder.Services.AddScoped<IProductService, ProductService>();
+
+builder.Services.AddScoped<IProductLocationDataAccess, ProductLocationDataAccess>();
+builder.Services.AddScoped<IProductLocationService, ProductLocationService>();
+
+builder.Services.AddScoped<IProductReviewDataAccess, ProductReviewDataAccess>();
+builder.Services.AddScoped<IProductReviewService, ProductReviewService>();
+
+builder.Services.AddScoped<IProductStockDataAccess, ProductStockDataAccess>();
+builder.Services.AddScoped<IProductStockService, ProductStockService>();
+
+builder.Services.AddScoped<IProductTrashDataAccess, ProductTrashDataAccess>();
+builder.Services.AddScoped<IProductTrashService, ProductTrashService>();
+
 builder.Services.AddCors(p => p.AddPolicy("corsapp", builder =>
 {
     builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
