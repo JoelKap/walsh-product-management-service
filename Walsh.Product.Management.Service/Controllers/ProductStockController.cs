@@ -18,9 +18,11 @@ namespace Walsh.Product.Management.Service.Api.Controllers
 
         // GET api/<ProductStockController>/5
         [HttpGet("{productId}")]
-        public IActionResult GetProductStock(int productId)
+        public async Task<IActionResult> GetProductStock(int productId)
         {
-            return Ok(_productStockService.GetProductInStockAsync(productId));
+            var productStocks = await _productStockService.GetProductInStockAsync(productId);
+
+            return Ok(productStocks);
         }
 
         // PUT api/<ProductStockController>
