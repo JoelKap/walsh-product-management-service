@@ -39,8 +39,6 @@ namespace Walsh.Product.Management.Service.Dal.DTO
 
                 entity.Property(e => e.CreatedAt).HasColumnType("datetime");
 
-                entity.Property(e => e.ProductPrice).HasColumnType("decimal(18, 0)");
-
                 entity.Property(e => e.UpdateAt).HasColumnType("datetime");
 
                 entity.HasOne(d => d.Category)
@@ -100,8 +98,6 @@ namespace Walsh.Product.Management.Service.Dal.DTO
                 entity.ToTable("ProductStock");
 
                 entity.Property(e => e.CreatedAt).HasColumnType("datetime");
-
-                entity.Property(e => e.ProductInStock).HasMaxLength(3);
 
                 entity.Property(e => e.UpdateAt).HasColumnType("datetime");
 

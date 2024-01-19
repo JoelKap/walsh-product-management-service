@@ -18,7 +18,7 @@ namespace Walsh.Product.Management.Service.Dal.DTO
         public string ProductImageUrl { get; set; } = null!;
         public string ProductDescription { get; set; } = null!;
         public bool ProductLike { get; set; }
-        public decimal ProductPrice { get; set; }
+        public int ProductPrice { get; set; }
         public bool IsDeleted { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdateAt { get; set; }
