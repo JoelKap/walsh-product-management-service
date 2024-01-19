@@ -13,7 +13,7 @@
         public bool IsDeleted { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdateAt { get; set; }
-        public ICollection<ProductReviewModel> Reviews { get; set; }
+        public List<ProductReviewModel> Reviews { get; set; }
         public ProductStockModel Stock { get; set; }
 
         public bool Validate(out List<string> messages)

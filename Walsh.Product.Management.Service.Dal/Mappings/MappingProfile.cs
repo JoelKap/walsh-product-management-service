@@ -6,21 +6,25 @@ namespace Walsh.Product.Management.Service.Dal.Mappings
 {
     public class MappingProfile
     {
-            public static IMapper MapperConfiguration()
+        public static IMapper MapperConfiguration()
+        {
+            var config = new MapperConfiguration(cfg =>
             {
-                var config = new MapperConfiguration(cfg =>
-                {
-                    cfg.CreateMap<List<DTO.Product>, List<ProductModel>>().ReverseMap();
-                    cfg.CreateMap<DTO.Product, ProductModel>().ReverseMap();
-                    cfg.CreateMap<ProductCategory, ProductCategoryModel>().ReverseMap();
-                    cfg.CreateMap<ProductLocation, ProductLocationModel>().ReverseMap();
-                    cfg.CreateMap<ProductReview, ProductReviewModel>().ReverseMap();
-                    cfg.CreateMap<ProductStock, ProductStockModel>().ReverseMap();
-                    cfg.CreateMap<DTO.Product, ProductTrashModel>().ReverseMap();
-                });
+                cfg.CreateMap<DTO.Product, ProductModel>()
+                    .ForMember(dest => dest.Reviews, src => src.MapFrom(o => o.ProductReviews));
 
-                IMapper mapper = config.CreateMapper();
-                return mapper;
-            }
+                cfg.CreateMap<ProductModel, DTO.Product>()
+                    .ForMember(dest => dest.ProductReviews, src => src.MapFrom(o => o.Reviews));
+                
+                cfg.CreateMap<ProductCategory, ProductCategoryModel>().ReverseMap();
+                cfg.CreateMap<ProductLocation, ProductLocationModel>().ReverseMap();
+                cfg.CreateMap<ProductReview, ProductReviewModel>().ReverseMap();
+                cfg.CreateMap<ProductStock, ProductStockModel>().ReverseMap();
+                cfg.CreateMap<DTO.Product, ProductTrashModel>().ReverseMap();
+            });
+
+            IMapper mapper = config.CreateMapper();
+            return mapper;
+        }
     }
 }

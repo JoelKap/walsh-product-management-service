@@ -40,14 +40,16 @@ namespace Walsh.Product.Management.Service.Api.Controllers
 
         // POST api/<ProductController>
         [HttpPost()]
-        public IActionResult Post(ProductModel model)
+        public async Task<IActionResult> Post(ProductModel model)
         {
             if (model.Validate(out List<string> messages) == false)
             {
                 return BadRequest(string.Join(Environment.NewLine, messages));
             }
 
-            return Ok(_productService.CreateProductAsync(model));
+            var createdProduct = await _productService.CreateProductAsync(model);
+
+            return Ok(createdProduct);
         }
 
         // PUT api/<ProductController>

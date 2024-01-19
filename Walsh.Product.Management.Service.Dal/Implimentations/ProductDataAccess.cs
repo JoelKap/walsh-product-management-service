@@ -30,6 +30,8 @@ namespace Walsh.Product.Management.Service.Dal.Implimentations
             try
             {
                 await _walshContext.SaveChangesAsync();
+
+                model.ProductId = productDto.ProductId;
                 return model;
             }
             catch (DbUpdateException ex)
