@@ -1,13 +1,9 @@
-using Walsh.Product.Management.Service.Model;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.OpenApi.Models;
-using Walsh.Product.Management.Service.Dal.Contracts;
-using Walsh.Product.Management.Service.Dal.Implimentations;
 using Walsh.Product.Management.Service.Bll.Contracts;
 using Walsh.Product.Management.Service.Bll.Implimentations;
+using Walsh.Product.Management.Service.Dal.Contracts;
 using Walsh.Product.Management.Service.Dal.DTO;
+using Walsh.Product.Management.Service.Dal.Implimentations;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,14 +14,22 @@ builder.Services.AddControllers();
 builder.Configuration.AddJsonFile("appsettings.json");
 
 // Database connection
-builder.Services.AddEntityFrameworkSqlServer()
-    .AddDbContext<WalshDbContext>(options => options.UseSqlServer(
-        builder.Configuration.GetConnectionString("WalshConnection"), sql =>
+builder.Services.AddDbContext<WalshDbContext>(options =>
+{
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("WalshConnection"),
+        sql =>
         {
             sql.EnableRetryOnFailure();
             sql.UseRelationalNulls();
             sql.CommandTimeout(1000);
-        }));
+        });
+
+    options.UseQueryTrackingBehavior(QueryTrackingBehavior.TrackAll);
+}, ServiceLifetime.Scoped);
+
+
+
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
