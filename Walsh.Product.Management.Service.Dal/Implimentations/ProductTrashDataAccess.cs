@@ -21,21 +21,40 @@ namespace Walsh.Product.Management.Service.Dal.Implimentations
 
         public async Task DeleteProductTrashAsync(int productId)
         {
-            var productDto = _walshContext.Products.FirstOrDefault(product => product.ProductId == productId);
+            var productDto = _walshContext.Products
+                               .Include(p => p.ProductReviews)
+                               .Include(p => p.Stock)
+                               .FirstOrDefault(product => product.ProductId == productId);
+
             if (productDto is null)
                 throw new NotFoundException($"Product with ID {productId} not found");
 
+            if (productDto.ProductReviews != null && productDto.ProductReviews.Any())
+                _walshContext.ProductReviews.RemoveRange(productDto.ProductReviews);
+            
             _walshContext.Products.Remove(productDto);
+
+            if (productDto.Stock != null)
+                _walshContext.ProductStocks.Remove(productDto.Stock);
+
             await _walshContext.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<ProductTrashModel>> GetProductTrashesAsync()
+        public IEnumerable<ProductTrashModel> GetProductTrashes()
         {
-            var productsDto = await _walshContext.Products
-                .Where(product => product.IsDeleted == true)
-                .ToListAsync();
+            var products = new List<ProductTrashModel>();
+            var productsDto = _walshContext.Products
+                                        .Include(x => x.ProductReviews)
+                                        .Include(x => x.Stock)
+                                        .AsNoTracking()
+                                        .Where(x => x.IsDeleted == true)
+                                        .ToList();
 
-            var products = _mapper.Map<List<DTO.Product>, List<ProductTrashModel>>(productsDto);
+            for (int i = 0; i < productsDto.Count; i++)
+            {
+                var product = _mapper.Map<DTO.Product, ProductTrashModel>(productsDto[i]);
+                products.Add(product);
+            }
 
             return products;
         }

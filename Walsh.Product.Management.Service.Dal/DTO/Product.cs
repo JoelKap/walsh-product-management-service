@@ -8,12 +8,12 @@ namespace Walsh.Product.Management.Service.Dal.DTO
         public Product()
         {
             ProductReviews = new HashSet<ProductReview>();
-            ProductStocks = new HashSet<ProductStock>();
         }
 
         public int ProductId { get; set; }
         public int LocationId { get; set; }
         public int CategoryId { get; set; }
+        public int StockId { get; set; }
         public string ProductTitle { get; set; } = null!;
         public string ProductImageUrl { get; set; } = null!;
         public string ProductDescription { get; set; } = null!;
@@ -25,7 +25,7 @@ namespace Walsh.Product.Management.Service.Dal.DTO
 
         public virtual ProductCategory Category { get; set; } = null!;
         public virtual ProductLocation Location { get; set; } = null!;
+        public virtual ProductStock Stock { get; set; } = null!;
         public virtual ICollection<ProductReview> ProductReviews { get; set; }
-        public virtual ICollection<ProductStock> ProductStocks { get; set; }
     }
 }

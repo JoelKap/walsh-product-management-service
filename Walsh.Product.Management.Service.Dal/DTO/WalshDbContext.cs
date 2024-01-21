@@ -52,6 +52,12 @@ namespace Walsh.Product.Management.Service.Dal.DTO
                     .HasForeignKey(d => d.LocationId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Product_ProductLocation");
+
+                entity.HasOne(d => d.Stock)
+                    .WithMany(p => p.Products)
+                    .HasForeignKey(d => d.StockId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Product_ProductStock");
             });
 
             modelBuilder.Entity<ProductCategory>(entity =>
@@ -80,8 +86,6 @@ namespace Walsh.Product.Management.Service.Dal.DTO
 
                 entity.Property(e => e.CreatedAt).HasColumnType("datetime");
 
-                entity.Property(e => e.ProductReview1).HasColumnName("ProductReview");
-
                 entity.Property(e => e.UpdateAt).HasColumnType("datetime");
 
                 entity.HasOne(d => d.Product)
@@ -100,12 +104,6 @@ namespace Walsh.Product.Management.Service.Dal.DTO
                 entity.Property(e => e.CreatedAt).HasColumnType("datetime");
 
                 entity.Property(e => e.UpdateAt).HasColumnType("datetime");
-
-                entity.HasOne(d => d.Product)
-                    .WithMany(p => p.ProductStocks)
-                    .HasForeignKey(d => d.ProductId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_ProductStock_Product");
             });
 
             OnModelCreatingPartial(modelBuilder);

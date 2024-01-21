@@ -23,25 +23,25 @@ namespace Walsh.Product.Management.Service.Dal.Implimentations
             model.CreatedAt = DateTime.Now;
             model.UpdateAt = DateTime.Now;
 
-            var productDto = _mapper.Map<ProductStockModel, DTO.ProductStock>(model);
+            var productStockDto = _mapper.Map<ProductStockModel, DTO.ProductStock>(model);
 
-            _walshContext.ProductStocks.Add(productDto);
+            _walshContext.ProductStocks.Add(productStockDto);
 
             try
             {
                 await _walshContext.SaveChangesAsync();
-                model.StockId = productDto.StockId;
-                return model;
+                var productStockModel = _mapper.Map<ProductStockModel>(productStockDto);
+                return productStockModel;
             }
             catch (DbUpdateException ex)
             {
-                throw new UpdateFailedException("Failed to update product.", ex);
+                throw new UpdateFailedException("Failed to update stock.", ex);
             }
         }
 
-        public async Task<ProductStockModel> GetProductInStockAsync(int productId)
+        public async Task<ProductStockModel> GetProductInStockAsync(int stockId)
         {
-            var stockDto = await _walshContext.ProductStocks.FirstOrDefaultAsync(product => product.ProductId == productId);
+            var stockDto = await _walshContext.ProductStocks.FirstOrDefaultAsync(stock => stock.StockId == stockId);
 
             if (stockDto is null) return null;
 
@@ -50,11 +50,11 @@ namespace Walsh.Product.Management.Service.Dal.Implimentations
 
         public async Task<ProductStockModel> UpdateProductInStockAsync(ProductStockModel model)
         {
-            var stockDto = _walshContext.ProductStocks.FirstOrDefault(product => product.ProductId == model.ProductId);
+            var stockDto = _walshContext.ProductStocks.FirstOrDefault(product => product.StockId == model.StockId);
 
             if (stockDto == null)
             {
-                throw new NotFoundException($"Product with ID {model.ProductId} not found.");
+                throw new NotFoundException($"Product with ID {model.StockId} not found.");
             }
 
             _mapper.Map<ProductStockModel, ProductStock>(model, stockDto);
@@ -66,7 +66,7 @@ namespace Walsh.Product.Management.Service.Dal.Implimentations
             }
             catch (Exception ex)
             {
-                throw new UpdateFailedException("Failed to update product.", ex);
+                throw new UpdateFailedException("Failed to update stock.", ex);
             }
         }
     }

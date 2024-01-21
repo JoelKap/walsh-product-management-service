@@ -23,24 +23,7 @@ namespace Walsh.Product.Management.Service.Bll.Implimentations
 
         public async Task<ProductModel> CreateProductAsync(ProductModel model)
         {
-            var product = await _productDataAccess.CreateProductAsync(model);
-
-            var productStockModel = new ProductStockModel();
-            productStockModel.ProductId = model.ProductId;
-            productStockModel.ProductInStock = model.Stock.ProductInStock;
-            var createdProductInStock = await _productStockDataAccess.CreateProductInStockAsync(productStockModel);
-
-            var productReviewModel = new ProductReviewModel();
-            productReviewModel.ProductId = model.ProductId;
-            productReviewModel.ProductReview = model.Reviews.FirstOrDefault().ProductReview;
-            productReviewModel.ProductRating = model.Reviews.FirstOrDefault().ProductRating;
-
-            var createdProductReview = await _productReviewDataAccess.CreateProductReviewAsync(productReviewModel);
-
-            product.Reviews = new List<ProductReviewModel> { createdProductReview }; ;
-            product.Stock = createdProductInStock;
-
-            return product;
+            return await _productDataAccess.CreateProductAsync(model);
         }
 
         public Task DeleteProductAsync(int productId) => _productDataAccess.DeleteProductAsync(productId);

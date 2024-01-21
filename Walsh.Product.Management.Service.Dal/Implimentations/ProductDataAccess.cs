@@ -30,9 +30,7 @@ namespace Walsh.Product.Management.Service.Dal.Implimentations
             try
             {
                 await _walshContext.SaveChangesAsync();
-
-                model.ProductId = productDto.ProductId;
-                return model;
+                return _mapper.Map<ProductModel>(productDto);
             }
             catch (DbUpdateException ex)
             {
@@ -53,7 +51,7 @@ namespace Walsh.Product.Management.Service.Dal.Implimentations
         public async Task<ProductModel> GetProductAsync(int productId)
         {
             var productDto = await _walshContext.Products
-                .Include(product => product.ProductStocks.Where(stock => stock.ProductId == productId))
+                .Include(product => product.Stock)
                 .Include(product => product.ProductReviews.Where(review => review.ProductId == productId))
                 .AsNoTracking()
                 .Where(product => product.IsDeleted == false && product.ProductId == productId)
@@ -64,9 +62,8 @@ namespace Walsh.Product.Management.Service.Dal.Implimentations
                 return null;
             }
 
-            List<ProductReviewModel>? productReviews = MapProductReview(productId, productDto);
-
-            ProductStockModel? productStock = MapProductStock(productId, productDto);
+            List<ProductReviewModel> productReviews = ConvertProductDtoToReviewModels(productId, productDto);
+            ProductStockModel productStock = ConvertProductDtoToStockModel(productId, productDto);
 
             var productModel = _mapper.Map<ProductModel>(productDto);
             productModel.Reviews = productReviews;
@@ -79,13 +76,14 @@ namespace Walsh.Product.Management.Service.Dal.Implimentations
         {
             var products = new List<ProductModel>();
             var productsDto = _walshContext.Products.Include(x => x.ProductReviews)
+                                                    .Include(x => x.Stock)
                                                     .AsNoTracking()
                                                     .Where(x => x.IsDeleted == false)
                                                     .ToList();
 
             for (int i = 0; i < productsDto.Count; i++)
             {
-                var product = _mapper.Map<Walsh.Product.Management.Service.Dal.DTO.Product, ProductModel>(productsDto[i]);
+                var product = _mapper.Map<DTO.Product, ProductModel>(productsDto[i]);
                 products.Add(product);
             }
             return products;
@@ -117,20 +115,20 @@ namespace Walsh.Product.Management.Service.Dal.Implimentations
 
         public async Task<ProductModel> UpdateProductAsync(ProductModel model)
         {
-            var productDto = _walshContext.Products.FirstOrDefault(product => product.ProductId == model.ProductId);
+            var productDto = _walshContext.Products.FirstOrDefaultAsync(product => product.ProductId == model.ProductId).Result;
 
             if (productDto == null)
             {
                 throw new NotFoundException($"Product with ID {model.ProductId} not found.");
             }
 
-            _mapper.Map<ProductModel, DTO.Product>(model, productDto);
-            var entity = _walshContext.Set<DTO.Product>().Update(productDto);
+            var mappedProductDTO = _mapper.Map<ProductModel, DTO.Product>(model, productDto);
+            _walshContext.Set<DTO.Product>().Update(productDto);
 
             try
             {
-                 _walshContext.SaveChanges();
-                return model;
+                _walshContext.SaveChanges();
+                return _mapper.Map<ProductModel>(mappedProductDTO);
             }
             catch (Exception ex)
             {
@@ -139,7 +137,7 @@ namespace Walsh.Product.Management.Service.Dal.Implimentations
         }
 
 
-        private static List<ProductReviewModel>? MapProductReview(int productId, DTO.Product? productDto)
+        private static List<ProductReviewModel>? ConvertProductDtoToReviewModels(int productId, DTO.Product? productDto)
         {
             return productDto.ProductReviews?.Select(review => new ProductReviewModel
             {
@@ -147,23 +145,22 @@ namespace Walsh.Product.Management.Service.Dal.Implimentations
                 IsDeleted = review.IsDeleted,
                 ProductId = productId,
                 ProductRating = review.ProductRating,
-                ProductReview = review.ProductReview1,
+                ProductReviewDescription = review.ProductReviewDescription,
                 ReviewId = review.ReviewId,
                 UpdateAt = review.UpdateAt,
             }).ToList();
         }
 
-        private static ProductStockModel? MapProductStock(int productId, DTO.Product? productDto)
+        private static ProductStockModel ConvertProductDtoToStockModel(int productId, DTO.Product productDto)
         {
-            return productDto.ProductStocks?.Select(stock => new ProductStockModel
+            return new ProductStockModel
             {
-                CreatedAt = stock.CreatedAt,
-                IsDeleted = stock.IsDeleted,
-                ProductId = productId,
-                ProductInStock = stock.ProductInStock,
-                UpdateAt = stock.UpdateAt,
-                StockId = stock.StockId
-            }).FirstOrDefault();
+                StockId = productDto.Stock.StockId,
+                IsDeleted = productDto.Stock.IsDeleted,
+                CreatedAt = productDto.Stock.CreatedAt,
+                ProductInStock = productDto.Stock.ProductInStock,
+                UpdateAt = productDto.Stock.UpdateAt,
+            };
         }
     }
 }

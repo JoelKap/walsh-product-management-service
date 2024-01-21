@@ -21,21 +21,21 @@ namespace Walsh.Product.Management.Service.Api.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            return Ok(_productTrashService.GetProductTrashesAsync());
+            return Ok(_productTrashService.GetProductTrashes());
         }
 
         // GET api/<TrashController>/5
         [HttpPut("RestoreProduct")]
         public IActionResult Restore([FromBody] ProductTrashModel model)
         {
-            return Ok(_productTrashService.RestoreProductTrashAsync(model)); 
+            return Ok(_productTrashService.RestoreProductTrashAsync(model).Result);
         }
 
         // DELETE api/<TrashController>/5
         [HttpDelete("{productId}")]
-        public IActionResult Delete(int productId)
+        public async Task<IActionResult> Delete(int productId)
         {
-            _productTrashService.DeleteProductTrashAsync(productId);
+            await _productTrashService.DeleteProductTrashAsync(productId);
             return NoContent();
         }
     }

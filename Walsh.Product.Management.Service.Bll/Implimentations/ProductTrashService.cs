@@ -15,7 +15,7 @@ namespace Walsh.Product.Management.Service.Bll.Implimentations
 
         public Task DeleteProductTrashAsync(int productId) => _productTrashDataAccess.DeleteProductTrashAsync(productId);
 
-        public Task<IEnumerable<ProductTrashModel>> GetProductTrashesAsync() => _productTrashDataAccess.GetProductTrashesAsync();
+        public IEnumerable<ProductTrashModel> GetProductTrashes() => _productTrashDataAccess.GetProductTrashes();
 
         public Task<bool> RestoreProductTrashAsync(ProductTrashModel model) => _productTrashDataAccess.RestoreProductTrashAsync(model); 
     }

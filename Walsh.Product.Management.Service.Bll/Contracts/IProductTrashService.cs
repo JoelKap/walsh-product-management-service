@@ -4,7 +4,7 @@ namespace Walsh.Product.Management.Service.Bll.Contracts
 {
     public interface IProductTrashService
     {
-        Task<IEnumerable<ProductTrashModel>> GetProductTrashesAsync();
+        IEnumerable<ProductTrashModel> GetProductTrashes();
         Task DeleteProductTrashAsync(int productId);
         Task<bool> RestoreProductTrashAsync(ProductTrashModel model);
     }
