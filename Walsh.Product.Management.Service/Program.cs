@@ -54,10 +54,15 @@ builder.Services.AddScoped<IProductStockService, ProductStockService>();
 builder.Services.AddScoped<IProductTrashDataAccess, ProductTrashDataAccess>();
 builder.Services.AddScoped<IProductTrashService, ProductTrashService>();
 
-builder.Services.AddCors(p => p.AddPolicy("corsapp", builder =>
+builder.Services.AddCors(options =>
 {
-    builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
-}));
+    options.AddPolicy("corsapp", builder =>
+    {
+        builder.WithOrigins("http://localhost:4200")
+               .AllowAnyMethod()
+               .AllowAnyHeader();
+    });
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
